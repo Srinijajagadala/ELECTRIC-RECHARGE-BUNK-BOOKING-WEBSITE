@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Nearby EV Bunk | EV Charging App</title>
+
+    <!-- Internal CSS -->
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 40px;
+            background-color: white;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .search-container input[type="text"] {
+            width: 70%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .search-container button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Bunk Details */
+        .bunk-details {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .bunk-details h3 {
+            color: #333;
+        }
+
+        .bunk-details p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .bunk-details a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .bunk-details a:hover {
+            text-decoration: underline;
+        }
+
+        /* Google Map */
+        .map-container {
+            margin-top: 20px;
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Slot Vacancy Styles */
+        .slot-container {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .slot-container h3 {
+            color: #333;
+        }
+
+        .slot {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slot span {
+            color: green;
+        }
+
+        .slot-booked span {
+            color: red;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Search Nearby EV Bunk</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Enter location to search for EV bunks..." />
+            <button onclick="searchBunk()">Search</button>
+        </div>
+
+        <div class="bunk-details" id="bunkDetails" style="display: none;">
+            <h3>Bunk Details:</h3>
+            <p><strong>Address:</strong> <span id="bunkAddress">123 EV Charging Street, City</span></p>
+            <p><strong>Mobile:</strong> <span id="bunkMobile">+123 456 7890</span></p>
+            <p><strong>Google Map Location:</strong> <a href="#" id="bunkMapLink" target="_blank">View on Map</a></p>
+        </div>
+
+        <div class="map-container" id="mapContainer" style="display: none;">
+            <!-- Placeholder for Google Map -->
+            <iframe id="bunkMap" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d583405.1515736547!2d78.67406722206867!3d21.779975152295518!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a29dd7c8e8e43df%3A0x35ef8b08438d32a1!2zSW5kaWE!5e0!3m2!1sen!2sin!4v1638257832351!5m2!1sen!2sin"
+                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+
+        <div class="slot-container" id="slotContainer" style="display: none;">
+            <h3>Available Slots:</h3>
+            <div class="slot">
+                <p>Slot 1: <span>Available</span></p>
+                <button class="btn" onclick="window.location.href='booking.html?location='+encodeURIComponent(document.getElementById('searchInput').value)">Book Slot</button>
+            </div>
+            <div class="slot slot-booked">
+                <p>Slot 2: <span>Booked</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate a bunk search and display details
+        function searchBunk() {
+            // Simulate getting details after search
+            document.getElementById('bunkDetails').style.display = 'block';
+            document.getElementById('mapContainer').style.display = 'block';
+            document.getElementById('slotContainer').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

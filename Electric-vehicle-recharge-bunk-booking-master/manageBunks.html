@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Bunks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #0072ff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        th {
+            background-color: #0072ff;
+            color: white;
+        }
+        button {
+            padding: 8px;
+            background-color: #0072ff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005ccc;
+        }
+    </style>
+</head>
+<body>
+    <h2>Manage EV Bunks</h2>
+    <table id="bunksTable">
+        <thead>
+            <tr>
+                <th>Bunk Name</th>
+                <th>Address</th>
+                <th>Available Slots</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Firebase SDKs (compatibility version) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+
+    <script>
+        // Firebase Initialization
+        const firebaseConfig = {
+            apiKey: "AIzaSyAERd9ZrQ9B3npKMmsW1NaJOazU3iGaVzI",
+            authDomain: "ev-charging-app-91906.firebaseapp.com",
+            databaseURL: "https://ev-charging-app-91906-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "ev-charging-app-91906",
+            storageBucket: "ev-charging-app-91906.appspot.com",
+            messagingSenderId: "7946463719",
+            appId: "1:7946463719:web:4cff66bd24653d8caf3542",
+            measurementId: "G-LJDQHS5XYN"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Fetch and Display Bunks
+        db.ref('evBunks').on('value', snapshot => {
+            const bunksTable = document.getElementById('bunksTable').getElementsByTagName('tbody')[0];
+            bunksTable.innerHTML = '';  // Clear existing table
+
+            snapshot.forEach(bunkSnapshot => {
+                const bunk = bunkSnapshot.val();
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${bunk.bunkName}</td>
+                    <td>${bunk.bunkAddress}</td>
+                    <td>${bunk.availableSlots}</td>
+                    <td>
+                        <button onclick="removeBunk('${bunkSnapshot.key}')">Remove</button>
+                    </td>
+                `;
+                bunksTable.appendChild(row);
+            });
+        });
+
+        // Remove Bunk
+        function removeBunk(bunkId) {
+            db.ref('evBunks/' + bunkId).remove()
+                .then(() => alert('Bunk removed successfully!'))
+                .catch(error => alert('Error: ' + error.message));
+        }
+    </script>
+</body>
+</html>

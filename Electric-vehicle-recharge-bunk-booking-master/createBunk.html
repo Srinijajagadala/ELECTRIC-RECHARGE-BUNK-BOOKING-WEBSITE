@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create EV Bunk</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #0072ff;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #0072ff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005ccc;
+        }
+    </style>
+</head>
+<body>
+    <h2>Create EV Bunk</h2>
+    <form id="bunkForm">
+        <input type="text" id="bunkName" placeholder="Enter Bunk Name" required>
+        <input type="text" id="bunkAddress" placeholder="Enter Bunk Address" required>
+        <input type="number" id="availableSlots" placeholder="Enter Available Slots" required>
+        <button type="button" onclick="createBunk()">Create Bunk</button>
+    </form>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
+        import { getDatabase, ref, push, set } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js';
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAERd9ZrQ9B3npKMmsW1NaJOazU3iGaVzI",
+            authDomain: "ev-charging-app-91906.firebaseapp.com",
+            databaseURL: "https://ev-charging-app-91906-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "ev-charging-app-91906",
+            storageBucket: "ev-charging-app-91906.appspot.com",
+            messagingSenderId: "7946463719",
+            appId: "1:7946463719:web:4cff66bd24653d8caf3542",
+            measurementId: "G-LJDQHS5XYN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+
+        window.createBunk = function() {
+            onAuthStateChanged(auth, user => {
+                if (user) {
+                    const bunkName = document.getElementById('bunkName').value;
+                    const bunkAddress = document.getElementById('bunkAddress').value;
+                    const availableSlots = document.getElementById('availableSlots').value;
+
+                    if (bunkName && bunkAddress && availableSlots) {
+                        const newBunkRef = ref(db, 'evBunks');
+                        const newBunkKey = push(newBunkRef).key; // Get a new reference key
+                        const bunkData = {
+                            bunkName,
+                            bunkAddress,
+                            availableSlots: parseInt(availableSlots, 10)
+                        };
+
+                        set(ref(db, 'evBunks/' + newBunkKey), bunkData)
+                            .then(() => {
+                                alert('EV Bunk created successfully!');
+                                document.getElementById('bunkForm').reset();
+                            })
+                            .catch(error => {
+                                alert('Error: ' + error.message);
+                            });
+                    } else {
+                        alert('Please fill out all fields');
+                    }
+                } else {
+                    alert('User not authenticated');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

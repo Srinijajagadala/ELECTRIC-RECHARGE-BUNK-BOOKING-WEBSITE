@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book EV Charging Slot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333333;
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+        }
+
+        .search-container input[type="text"] {
+            width: 70%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #cccccc;
+            border-radius: 5px 0 0 5px;
+            margin-right: -1px;
+        }
+
+        .search-container button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-container button:hover {
+            background-color: #45a049;
+        }
+
+        .available-slots {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .available-slots h3 {
+            color: #333333;
+        }
+
+        .slot {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+        }
+
+        .slot.available {
+            border-left: 5px solid #4CAF50;
+        }
+
+        .slot.booked {
+            border-left: 5px solid #f44336;
+        }
+
+        .slot span {
+            font-weight: bold;
+        }
+
+        .booking-form {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .booking-form label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333333;
+        }
+
+        .booking-form input[type="text"],
+        .booking-form input[type="number"],
+        .booking-form select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .booking-form button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .booking-form button:hover {
+            background-color: #45a049;
+        }
+
+        .confirmation {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .confirmation.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Book EV Charging Slot</h1>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Enter location to find available slots..." />
+            <button onclick="searchSlots()">Search</button>
+        </div>
+
+        <div class="available-slots" id="availableSlots">
+            <!-- Available slots will be dynamically added here -->
+        </div>
+
+        <form class="booking-form" id="bookingForm" style="display: none;">
+            <h3>Book a Slot</h3>
+            <input type="hidden" id="slotNumber" />
+
+            <label for="userName">Your Name</label>
+            <input type="text" id="userName" placeholder="Enter your name" required />
+
+            <label for="userContact">Contact Number</label>
+            <input type="text" id="userContact" placeholder="Enter your contact number" required />
+
+            <button type="button" onclick="bookSlot()">Book Slot</button>
+        </form>
+
+        <div class="confirmation hidden" id="confirmation">
+            <h3>Booking Confirmed!</h3>
+            <p>Your slot has been successfully booked.</p>
+        </div>
+    </div>
+
+    <script>
+        // Example script for managing slot booking and search
+
+        // Dummy function for searching slots (implement according to your logic)
+        function searchSlots() {
+            const searchInput = document.getElementById('searchInput').value;
+            const availableSlots = document.getElementById('availableSlots');
+            const bookingForm = document.getElementById('bookingForm');
+            
+            // Clear previous results
+            availableSlots.innerHTML = '';
+            bookingForm.style.display = 'none';
+            document.getElementById('confirmation').classList.add('hidden');
+
+            // Dummy data
+            const slots = [
+                { slotNumber: 1, available: true },
+                { slotNumber: 2, available: false },
+                { slotNumber: 3, available: true },
+            ];
+
+            // Display available slots
+            slots.forEach(slot => {
+                const slotDiv = document.createElement('div');
+                slotDiv.className = 'slot ' + (slot.available ? 'available' : 'booked');
+                slotDiv.innerHTML = `
+                    <p>Slot Number: <span>${slot.slotNumber}</span></p>
+                    <p>Status: <span>${slot.available ? 'Available' : 'Booked'}</span></p>
+                    ${slot.available ? '<button onclick="showBookingForm(' + slot.slotNumber + ')">Book Now</button>' : ''}
+                `;
+                availableSlots.appendChild(slotDiv);
+            });
+        }
+
+        function showBookingForm(slotNumber) {
+            document.getElementById('slotNumber').value = slotNumber;
+            document.getElementById('bookingForm').style.display = 'block';
+        }
+
+        function bookSlot() {
+            const slotNumber = document.getElementById('slotNumber').value;
+            const userName = document.getElementById('userName').value;
+            const userContact = document.getElementById('userContact').value;
+
+            // Implement booking logic here
+
+            // Show confirmation
+            document.getElementById('confirmation').classList.remove('hidden');
+            document.getElementById('bookingForm').reset();  // Reset the form fields
+        }
+    </script>
+</body>
+</html>
